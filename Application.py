@@ -13,6 +13,7 @@ class game(object):
         pygame.display.set_caption('Virtual Stock Trader')
 
         self.button = Button(50, 50, 50, 50, self.win)
+        print(self.stock.companyPrices)
 
     def run(self):
         run = True
