@@ -35,16 +35,8 @@ class game(object):
             mouse = pygame.mouse.get_pos()
             click = pygame.mouse.get_pressed()
 
-            #Button interaction
-            if self.buy_btn.x + self.buy_btn.width > mouse[0] > self.buy_btn.x and self.buy_btn.y + self.buy_btn.height > mouse[1] > self.buy_btn.y:
-                self.buy_btn.active(True)
-            else:
-                self.buy_btn.active(False)
-
-            if self.sell_btn.x + self.sell_btn.width > mouse[0] > self.sell_btn.x and self.sell_btn.y + self.sell_btn.height > mouse[1] > self.sell_btn.y:
-                self.sell_btn.active(True)
-            else:
-                self.sell_btn.active(False)
+            self.buy_btn.is_hovering(mouse)
+            self.sell_btn.is_hovering(mouse)
 
 
             '''Drawing and updating the window'''

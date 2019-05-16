@@ -18,5 +18,18 @@ class Button(object):
         else:
             self.color = self.inactive_color
 
+    #Changes colors of mouse is within bounds of the button box
+    def is_hovering(self, mouse):
+        #Button interaction
+        if self.x + self.width > mouse[0] > self.x and self.y + self.height > mouse[1] > self.y:
+            self.active(True)
+        else:
+            self.active(False)
+
+        if self.x + self.width > mouse[0] > self.x and self.y + self.height > mouse[1] > self.y:
+            self.active(True)
+        else:
+            self.active(False)
+
     def draw(self, win):
         pygame.draw.rect(win, self.color, (self.x, self.y, self.width, self.height))
