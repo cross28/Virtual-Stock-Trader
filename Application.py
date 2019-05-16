@@ -5,15 +5,15 @@ from Button import Button
 pygame.init()
 
 class game(object):
-    def __init__(self, companies=[]):
-        self.companies = companies
-        self.stock = Stock(self.companies)
-
-        self.win = pygame.display.set_mode((500, 500))
+    def __init__(self):
+        self.SCREEN_WIDTH = 1000
+        self.SCREEN_HEIGHT = 700
+        self.win = pygame.display.set_mode((self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
         pygame.display.set_caption('Virtual Stock Trader')
 
-        self.button = Button(50, 50, 50, 50, self.win)
-        print(self.stock.companyPrices)
+        #x, y, width, height, window
+        self.button = Button(50, 50, 50, 50, 'images/buy.jpg')
+        
 
     def run(self):
         run = True
@@ -23,11 +23,15 @@ class game(object):
                 if event.type == pygame.QUIT:
                     run = False
 
-            self.button.draw()
+            self.win.fill((255,255,255))
+            self.button.draw(self.win)
             pygame.display.update()
 
         pygame.quit()
 
+def main():
+    if __name__=='__main__':
+        g = game()
+        g.run()
 
-g = game(['AMZN'])
-g.run()
+main()
