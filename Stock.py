@@ -2,7 +2,7 @@ import requests as re
 import json
 import datetime as dt
 
-api_key = 'KZRJFKG9B169Z7XY'
+api_key = open('secret.txt', 'r')
 
 class Stock(object):
     def __init__(self, companyList=[]):
