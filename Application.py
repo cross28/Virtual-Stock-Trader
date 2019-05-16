@@ -5,11 +5,14 @@ from Button import Button
 pygame.init()
 
 WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
+
 RED = (255, 0, 0)
 BRIGHT_RED = (255, 99, 71)
+DARK_RED = (139, 0, 0)
+
 GREEN = (0, 255, 0)
 BRIGHT_GREEN = (50, 205, 50)
+DARK_GREEN = (0, 100, 0)
 
 class game(object):
     def __init__(self):
@@ -18,9 +21,9 @@ class game(object):
         self.win = pygame.display.set_mode((self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
         pygame.display.set_caption('Virtual Stock Trader')
 
-        #x, y, width, height, image
-        self.buy_btn = Button(50, 50, 50, 50, GREEN, BRIGHT_GREEN, 'hello')
-        self.sell_btn = Button(50, 100, 50, 50, RED, BRIGHT_RED, 'goodbye')
+        #x, y, width, height, default color, hover color, clicked color, text
+        self.buy_btn = Button(50, 50, 50, 50, GREEN, BRIGHT_GREEN, DARK_GREEN, 'hello')
+        self.sell_btn = Button(50, 100, 50, 50, RED, BRIGHT_RED, DARK_RED, 'goodbye')
         
 
     def run(self):
@@ -35,8 +38,8 @@ class game(object):
             mouse = pygame.mouse.get_pos()
             click = pygame.mouse.get_pressed()
 
-            self.buy_btn.is_hovering(mouse)
-            self.sell_btn.is_hovering(mouse)
+            self.buy_btn.mouse_actions(mouse, click[0])
+            self.sell_btn.mouse_actions(mouse, click[0])
 
 
             '''Drawing and updating the window'''
