@@ -1,6 +1,7 @@
 import pygame
 from Stock import Stock
 from Button import Button
+from Menu import Menu
 
 pygame.init()
 
@@ -21,9 +22,11 @@ class game(object):
         self.win = pygame.display.set_mode((self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
         pygame.display.set_caption('Virtual Stock Trader')
 
+        self.menu = Menu()
+
         #x, y, width, height, default color, hover color, clicked color, text
-        self.buy_btn = Button(50, 50, 50, 50, GREEN, BRIGHT_GREEN, DARK_GREEN, 'hello')
-        self.sell_btn = Button(50, 100, 50, 50, RED, BRIGHT_RED, DARK_RED, 'goodbye')
+        #self.buy_btn = Button(50, 50, 50, 50, GREEN, BRIGHT_GREEN, DARK_GREEN, 'hello')
+        #self.sell_btn = Button(50, 100, 50, 50, RED, BRIGHT_RED, DARK_RED, 'goodbye')
         
 
     def run(self):
@@ -36,26 +39,23 @@ class game(object):
 
             '''Mouse Events'''
             mouse = pygame.mouse.get_pos()
-            click = pygame.mouse.get_pressed()
+            click = pygame.mouse.get_pressed()[0]
 
-            self.buy_btn.mouse_actions(mouse, click[0])
-            self.sell_btn.mouse_actions(mouse, click[0])
+            self.menu.buy_btn.mouse_actions(mouse, click)
+            self.menu.sell_btn.mouse_actions(mouse, click)
 
 
             '''Drawing and updating the window'''
             self.win.fill(WHITE)
-
-            self.buy_btn.draw(self.win)
-            self.sell_btn.draw(self.win)
+            self.menu.draw(self.win)
 
             pygame.display.update()
 
 
         pygame.quit()
 
-def main():
-    if __name__=='__main__':
-        g = game()
-        g.run()
 
-main()
+
+if __name__=='__main__':
+    g = game()
+    g.run()
