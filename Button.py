@@ -1,14 +1,19 @@
 import pygame 
+from Text import Text
 
 class Button(object):
-    def __init__(self, x, y, width, height, default_color, hover_color, clicked_color, text):
+    def __init__(self, win, x, y, width, height, default_color, hover_color, clicked_color, msg):
+        self.win = win
+
         self.x = x
         self.y = y
         self.width = width
         self.height = height 
-        self.text = text
 
-        self.color=()
+        self.text = Text(self.win, self.x, self.y, size=20)
+        self.msg = msg
+
+        self.color = ()
         self.default_color = default_color
         self.hover_color = hover_color
         self.clicked_color = clicked_color
@@ -23,5 +28,10 @@ class Button(object):
         else:
             self.color = self.default_color
 
-    def draw(self, win):
-        pygame.draw.rect(win, self.color, (self.x, self.y, self.width, self.height))
+    def draw(self):
+        pygame.draw.rect(self.win, self.color, (self.x, self.y, self.width, self.height))
+
+        # Must set text x and y position in the draw function because the message isn't created yet
+        self.text.x = self.x + self.text.get_width()/2
+        self.text.y = self.y + self.text.get_height()/2
+        self.text.draw(self.msg)
