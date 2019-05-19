@@ -13,18 +13,19 @@ DARK_GREEN = (0, 100, 0)
 
 BLACK = (0, 0, 0)
 class Menu(object):
-    def __init__(self):
-        self.buy_btn = Button(50, 50, 50, 50, GREEN, BRIGHT_GREEN, DARK_GREEN, 'Buy')
-        self.sell_btn = Button(50, 100, 50, 50, RED, BRIGHT_RED, DARK_RED, 'Sell')
+    def __init__(self, win, screen_width, screen_height):
+        self.win = win
+        self.screen_width = screen_width
+        self.screen_height = screen_height
 
-        #Text(color, message, x pos, y pos, font(optional), size(optional), is_bold(optional))
-        self.text = Text(BLACK, 'Choose which stocks you want to monitor from', 150, 150, size=60, is_bold=True)
+        self.buy_btn = Button(self.win, 50, 50, 50, 50, GREEN, BRIGHT_GREEN, DARK_GREEN, 'Buy')
+        self.sell_btn = Button(self.win, 50, 100, 50, 50, RED, BRIGHT_RED, DARK_RED, 'Sell')
 
-        #self.choose_stocks()
+    def choose_stocks_menu(self):
+        text = Text(self.win, 100,100)
+        text.draw('Hi')
+        self.buy_btn.draw()
+        self.sell_btn.draw()
 
-   #def choose_stocks_menu():
-
-    def draw(self, win):
-        self.buy_btn.draw(win)
-        self.sell_btn.draw(win)
-        self.text.draw(win)
+    #def main_menu(self):
+        
