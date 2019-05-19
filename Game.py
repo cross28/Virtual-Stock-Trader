@@ -22,7 +22,7 @@ class game(object):
         self.win = pygame.display.set_mode((self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
         pygame.display.set_caption('Virtual Stock Trader')
 
-        self.menu = Menu()
+        self.menu = Menu(self.win, self.SCREEN_WIDTH, self.SCREEN_HEIGHT)
 
         #x, y, width, height, default color, hover color, clicked color, text
         #self.buy_btn = Button(50, 50, 50, 50, GREEN, BRIGHT_GREEN, DARK_GREEN, 'hello')
@@ -47,8 +47,7 @@ class game(object):
 
             '''Drawing and updating the window'''
             self.win.fill(WHITE)
-            self.menu.draw(self.win)
-
+            self.menu.choose_stocks_menu()
             pygame.display.update()
 
 
