@@ -9,15 +9,15 @@ class Button(object):
         self.width = 200
         self.height = 90
 
-        self.text = Text(self.win, self.x, self.y, size=50)
         self.msg = msg
-
+        self.text = Text(self.win, self.x, self.y, self.msg, size=50)
+        
         self.color = ()
         self.default_color = default_color
         self.hover_color = hover_color
         self.clicked_color = clicked_color
 
-    #Changes colors of mouse is within bounds of the button box
+    #Changes colors of mouse is within bounds of the button box, checks for clicks
     def events(self):
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()[0]
@@ -34,6 +34,6 @@ class Button(object):
         pygame.draw.rect(self.win, self.color, (self.x, self.y, self.width, self.height))
 
         # Must set text x and y position in the draw function because the message isn't created yet
-        self.text.x = self.x + self.text.x / 3
-        self.text.y = self.y + self.text.y / 3
-        self.text.draw(self.msg, inBox=True)
+        self.text.x = self.x + self.text.text.get_rect().width / 2
+        self.text.y = self.y + self.text.text.get_rect().height / 2
+        self.text.draw()
