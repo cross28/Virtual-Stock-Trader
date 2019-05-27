@@ -15,6 +15,7 @@ GREEN = (0, 255, 0, 0.5)
 BRIGHT_GREEN = (50, 205, 50)
 DARK_GREEN = (0, 100, 0)
 
+#Grabbing Stock Data
 api_key = open('secret.txt', 'r').read()
 day = dt.date.today()
 companyList = ['AMZN', 'AAPL', 'FB', 'MSFT', 'NFLX']
@@ -24,6 +25,13 @@ for company in companyList:
     data = re.get(url).json()['Time Series (Daily)'][str('2019-05-24')]
     companyPrices[company] = data
 companyPrices = json.dumps(companyPrices, indent = 2)
+
+#Pre-loading stock images
+fb = pygame.image.load('images/facebook.png')
+amzn = pygame.image.load('images/amazon.png')
+nflx = pygame.image.load('images/netflix.png')
+appl = pygame.image.load('images/apple.png')
+msft = pygame.image.load('images/microsoft.png')
 
 class Menu(object):
     def __init__(self, win, screen_width, screen_height):
@@ -37,11 +45,11 @@ class Menu(object):
         self.sell_btn = Button(self.win, 3 * self.screen_width / 5, 800, RED, BRIGHT_RED, DARK_RED, 'SELL')
 
         self.companyPrices = companyPrices
-        self.facebook = Stock(self.win, 10, 300, 'images/facebook.png', self.companyPrices)
-        self.amazon = Stock(self.win, self.screen_width / 5, 300, 'images/amazon.png', self.companyPrices)
-        self.apple = Stock(self.win, 2 * self.screen_width / 5, 300, 'images/apple.png', self.companyPrices)
-        self.microsoft = Stock(self.win, 3 * self.screen_width / 5, 300, 'images/microsoft.png', self.companyPrices)
-        self.netflix = Stock(self.win, 4.2 * self.screen_width / 5, 300, 'images/netflix.png', self.companyPrices)
+        self.facebook = Stock(self.win, 30, 300, fb, self.companyPrices)
+        self.amazon = Stock(self.win, self.screen_width / 5, 300, amzn, self.companyPrices)
+        self.apple = Stock(self.win, 2 * self.screen_width / 5, 300, appl, self.companyPrices)
+        self.microsoft = Stock(self.win, 3 * self.screen_width / 5, 300, msft, self.companyPrices)
+        self.netflix = Stock(self.win, 4.2 * self.screen_width / 5, 300, nflx, self.companyPrices)
 
     def displayBuySellMenu(self):
         self.buy_btn.draw()
