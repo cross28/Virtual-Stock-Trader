@@ -1,20 +1,17 @@
-import requests as re 
-import json
-import datetime as dt
-
-api_key = open('secret.txt', 'r').read()
+import pygame 
 
 class Stock(object):
-    def __init__(self, win):
+    def __init__(self, win, x, y, img, data={}):
         self.win = win
-        self.companyList = ['AMZN', 'AAPL', 'FB', 'MSFT', 'NFLX', 'SNAP', 'TSLA', 'TWTR']
-    
-    def getStockData(self):
-        day = dt.date.today()
-        for company in self.companyList:
-            url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={}&outputsize=full&apikey='.format(company) + api_key
-            data = re.get(url).json()
-            data = data["Time Series (Daily)"][str('2019-05-15')]
-            self.companyPrices[company] = data
-        self.companyPrices = json.dumps(self.companyPrices, indent = 2)
+        self.x = x
+        self.y = y
+
+        self.data = {}
+        self.data = data
+
+        self.img = pygame.image.load(img)
+        self.img = pygame.transform.scale(self.img, (150, 150))
+
+    def draw(self):
+        self.win.blit(self.img, (self.x, self.y))     
         
