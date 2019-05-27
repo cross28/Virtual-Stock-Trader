@@ -3,9 +3,6 @@ from Stock import Stock
 from Button import Button
 from Menu import Menu
 
-
-WHITE = (255, 255, 255)
-
 class game(object):
     def __init__(self):
         self.SCREEN_WIDTH = 1500
@@ -23,7 +20,7 @@ class game(object):
                     run = False
 
             '''Drawing and updating the window'''
-            self.win.fill(WHITE)
+            self.win.fill((255, 255, 255))
             self.menu.displayBuySellMenu()
             pygame.display.update()
 
