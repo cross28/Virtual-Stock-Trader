@@ -3,7 +3,7 @@ from Button import Button
 from Stock import Stock
 from Text import Text
 
-import requests as re 
+import requests as re
 import json
 import datetime as dt
 import time
@@ -22,9 +22,9 @@ companyList = ['AMZN', 'AAPL', 'FB', 'MSFT', 'NFLX']
 companyPrices = {}
 for company in companyList:
     url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={}&outputsize=full&apikey='.format(company) + api_key
-    data = re.get(url).json()['Time Series (Daily)'][str('2019-05-24')]
+    data = re.get(url).json()['Time Series (Daily)']['2019-05-24']
     companyPrices[company] = data
-companyPrices = json.dumps(companyPrices, indent = 2)
+
 
 #Pre-loading stock images
 fb = pygame.image.load('images/facebook.png')
@@ -40,26 +40,23 @@ class Menu(object):
         self.screen_height = screen_height
 
         self.money = Text(self.win, 20, 40, '50, 000', size=40)
-        self.money.msg = 'Hello'
         self.buy_btn = Button(self.win, self.screen_width / 5, 800, GREEN, BRIGHT_GREEN, DARK_GREEN, 'BUY')
         self.sell_btn = Button(self.win, 3 * self.screen_width / 5, 800, RED, BRIGHT_RED, DARK_RED, 'SELL')
 
+        '''Stock Objects'''
         self.companyPrices = companyPrices
-        self.facebook = Stock(self.win, 30, 300, fb, self.companyPrices)
-        self.amazon = Stock(self.win, self.screen_width / 5, 300, amzn, self.companyPrices)
-        self.apple = Stock(self.win, 2 * self.screen_width / 5, 300, appl, self.companyPrices)
-        self.microsoft = Stock(self.win, 3 * self.screen_width / 5, 300, msft, self.companyPrices)
-        self.netflix = Stock(self.win, 4.2 * self.screen_width / 5, 300, nflx, self.companyPrices)
+        #self.companyPrices = 20
+        facebook = Stock(self.win, 30, 300, fb, self.companyPrices['FB'])
+        amazon = Stock(self.win, self.screen_width / 5, 300, amzn, self.companyPrices['AMZN'])
+        apple = Stock(self.win, 2 * self.screen_width / 5, 300, appl, self.companyPrices['AAPL'])
+        microsoft = Stock(self.win, 3 * self.screen_width / 5, 300, msft, self.companyPrices['MSFT'])
+        netflix = Stock(self.win, 4.2 * self.screen_width / 5, 300, nflx, self.companyPrices['NFLX'])
+        self.stocks = [facebook, amazon, apple, microsoft, netflix]
+
+    def mainMenu(self):
+        for stock in self.stocks:
+            stock.draw()
 
     def displayBuySellMenu(self):
         self.buy_btn.draw()
         self.sell_btn.draw()
-        self.money.draw()
-
-        self.facebook.draw()
-        self.amazon.draw()
-        self.apple.draw()
-        self.microsoft.draw()
-        self.netflix.draw()
-
-
