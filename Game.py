@@ -1,7 +1,6 @@
 import pygame
-from Stock import Stock
-from Button import Button
 from Menu import Menu
+
 
 class game(object):
     def __init__(self):
@@ -10,7 +9,7 @@ class game(object):
         self.win = pygame.display.set_mode((self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
         pygame.display.set_caption('Virtual Stock Trader')
         self.menu = Menu(self.win, self.SCREEN_WIDTH, self.SCREEN_HEIGHT)
-        
+
     def run(self):
         run = True
         while run:
@@ -18,17 +17,17 @@ class game(object):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
-
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        run = False
             '''Drawing and updating the window'''
             self.win.fill((255, 255, 255))
-            self.menu.displayBuySellMenu()
+            self.menu.mainMenu()
             pygame.display.update()
-
-
-        pygame.quit()
 
 
 if __name__ == '__main__':
     pygame.init()
     g = game()
     g.run()
+    pygame.quit()
