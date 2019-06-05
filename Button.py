@@ -19,19 +19,20 @@ class Button(object):
         self.clicked_color = clicked_color
 
     #Changes colors of mouse is within bounds of the button box, checks for clicks
-    def events(self):
+    def events(self, action=None):
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()[0]
 
         if self.x + self.width > mouse[0] > self.x and self.y + self.height > mouse[1] > self.y:
             self.color = self.hover_color
-            if click == 1:
+            if click == 1 and action != None:
                 self.color = self.clicked_color
+                action()
         else:
             self.color = self.default_color
 
-    def draw(self):
-        self.events()
+    def draw(self, action=None):
+        self.events(action)
         pygame.draw.rect(self.win, self.color, (self.x, self.y, self.width, self.height))
 
         # Must set text x and y position in the draw function because the message isn't created yet

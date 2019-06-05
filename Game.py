@@ -67,8 +67,8 @@ def buySellMenu():
                     quit()
 
         win.fill(WHITE)
-        buy_btn.draw()
-        sell_btn.draw()
+        buy_btn.draw(mainMenu)
+        sell_btn.draw(mainMenu)
         pygame.display.update()
 
 def mainMenu():
