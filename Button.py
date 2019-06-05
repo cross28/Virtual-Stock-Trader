@@ -1,4 +1,5 @@
 import pygame 
+import time
 from Text import Text
 
 class Button(object):
