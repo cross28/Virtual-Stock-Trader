@@ -13,7 +13,7 @@ class Button(object):
         self.msg = msg
         self.text = Text(self.win, self.x, self.y, self.msg, size=50)
         
-        self.color = ()
+        self.color = () 
         self.default_color = default_color
         self.hover_color = hover_color
         self.clicked_color = clicked_color
@@ -26,7 +26,7 @@ class Button(object):
         if self.x + self.width > mouse[0] > self.x and self.y + self.height > mouse[1] > self.y:
             self.color = self.hover_color
             if click == 1 and action != None:
-                self.color = self.clicked_color
+                self.color = self.clicked_color        
                 action()
         else:
             self.color = self.default_color
