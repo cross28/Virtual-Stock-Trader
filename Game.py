@@ -1,11 +1,13 @@
 import pygame
-from Button import Button
-from Text import Text
-from Stock import Stock
-
 import requests as re 
 import json
 import datetime as dt 
+import time
+
+from Button import Button
+from Text import Text
+from Stock import Stock
+from ioBox import ioBox
 
 RED = (255, 0, 0)
 BRIGHT_RED = (255, 99, 71)
@@ -41,23 +43,17 @@ nflx = pygame.image.load('images/netflix.png')
 appl = pygame.image.load('images/apple.png')
 msft = pygame.image.load('images/microsoft.png')
 
-#Creating buttons
-money = Text(win, 20, 40, '50,000', size=40)
+#Creating buttons 
+money = 50000
+moneyBuffer = ''
+moneyBox = Text(win, 20, 40, '${}'.format(money), size=90)
 buy_btn = Button(win, SCREEN_WIDTH / 5, 800, GREEN, BRIGHT_GREEN, DARK_GREEN, 'Buy')
 sell_btn = Button(win, 3 * SCREEN_WIDTH / 5, 800, RED, BRIGHT_RED, DARK_RED, 'Sell')
 
 #Input box for buying/selling the stocks
-inputBoxOuter = Button(win, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, BLACK, BLACK, BLACK, '')
-inputBoxInner = Button(win, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, WHITE, WHITE, WHITE, '')
-inputBoxOuter.width = 950
-inputBoxOuter.height = 200
-inputBoxInner.width = 940
-inputBoxInner.height = 190
-inputBoxInner.x = inputBoxOuter.x + (inputBoxOuter.width - inputBoxInner.width) / 2
-inputBoxInner.y = inputBoxOuter.y + (inputBoxOuter.height - inputBoxInner.height) / 2
-inputText = Text(win, 30, 90, 'hello', size=60)
-inputText.x = inputBoxInner.x + inputText.text.get_rect().width / 2
-inputText.y = inputBoxInner.y + inputText.text.get_rect().height / 2
+inpBox = ioBox(win, buy_btn.x, SCREEN_HEIGHT / 3, buy_btn.width + sell_btn.width, 200)
+outBox = ioBox(win, buy_btn.x, 300, buy_btn.width + sell_btn.width, 200)
+screenText = Text(win, inpBox.x, inpBox.y + inpBox.height + 20, 'How many shares would you like to buy?', size=50)
 
 #Stock buttons
 companyPrices = {'FB':{'1. open': 20}, 'AMZN':{'1. open': 20}, 'AAPL':{'1. open': 20}, 'MSFT':{'1. open':20}, 'NFLX':{'1. open': 20}}
@@ -69,6 +65,21 @@ netflix = Stock(win, 4.2 * SCREEN_WIDTH / 5, 300, nflx, companyPrices['NFLX'])
 stocks = [facebook, amazon, apple, microsoft, netflix]
 
 def buySellMenu():
+    global money
+    global moneyBox
+    global moneyBuffer
+
+    moneyBuffer = ''
+
+    if buy_btn.isClicked is True and moneyBuffer:
+        money -= int(moneyBuffer)
+        moneyBox.changeMessage('${}'.format(money))
+        buy_btn.isClicked = False
+    elif sell_btn.isClicked is True and moneyBuffer:
+        money += int(moneyBuffer)
+        moneyBox.changeMessage('${}'.format(money))
+        sell_btn.isClicked = False
+
     run = True
     while run:
         for event in pygame.event.get():
@@ -79,21 +90,38 @@ def buySellMenu():
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     quit()
+                elif event.key != pygame.K_BACKSPACE:
+                    if inpBox.text.text.get_rect().width <= inpBox.width - 33:
+                        moneyBuffer += chr(event.key) 
+                        inpBox.updateBox(moneyBuffer)
+                    else:
+                        pass
                 else:
-                    string = inputText.msg + chr(event.key)
-                    inputText.changeMessage(string)
-                    if event.key == pygame.K_BACKSPACE:
-                        string = inputText.changeMessage(string[:-1])
+                    moneyBuffer = ''
+                    inpBox.updateBox(moneyBuffer)
 
         win.fill(WHITE)
         buy_btn.draw(mainMenu)
-        sell_btn.draw(mainMenu)
-        inputBoxOuter.draw()
-        inputBoxInner.draw()
-        inputText.draw()
+        sell_btn.draw(mainMenu)        
+        screenText.draw()
+        inpBox.draw()
+        moneyBox.draw()
         pygame.display.update()
 
 def mainMenu():
+    global money
+    global moneyBox
+    global moneyBuffer
+
+    if buy_btn.isClicked is True and moneyBuffer:
+        money -= int(moneyBuffer)
+        moneyBox.changeMessage('${}'.format(money))
+        buy_btn.isClicked = False
+    elif sell_btn.isClicked is True and moneyBuffer:
+        money += int(moneyBuffer)
+        moneyBox.changeMessage('${}'.format(money))
+        sell_btn.isClicked = False
+
     run = True
     while run:
         for event in pygame.event.get():
@@ -104,14 +132,14 @@ def mainMenu():
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     quit()
-        
-        win.fill(WHITE)
-        inputText.changeMessage('')
+
+        win.fill(WHITE)   
         for stock in stocks:
-            stock.draw(buySellMenu)
+            stock.draw(buySellMenu)     
+        moneyBox.draw()
+        inpBox.updateBox('')
         pygame.display.update()
 
-
-mainMenu()
-
-pygame.quit()
+if __name__ == '__main__':
+    mainMenu()
+    pygame.quit()
