@@ -1,5 +1,4 @@
 import pygame 
-import time
 from Text import Text
 
 class Stock(object):
@@ -18,11 +17,12 @@ class Stock(object):
 
     def draw(self,action=None):
         mouse = pygame.mouse.get_pos()
-        click = pygame.mouse.get_pressed()
+        click = pygame.mouse.get_pressed()[0]
         
         if self.x + self.width > mouse[0] > self.x and self.y + self.height > mouse[1] > self.y:
             pygame.draw.rect(self.win, (0, 0, 255), (self.x - 25, self.y - 25, self.width + 50, self.height + 50))
-            if click[0] == 1 and action!=None:
+            self.win.blit(self.img, (self.x, self.y))
+            if click == 1 and action != None:
                 action()                   
         else:
             self.win.blit(self.img, (self.x, self.y))
