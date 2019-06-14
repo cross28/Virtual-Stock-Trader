@@ -8,12 +8,15 @@ class Stock(object):
         self.y = y
         self.width = 150
         self.height = 150
+
+        self.stocksOwned = 0
         self.data = {}
         self.data = data['1. open']
         self.data = round(float(self.data), 2)
 
         self.img = pygame.transform.scale(img, (self.width, self.height))
-        self.text = Text(self.win, self.x + self.width / 2 - 40, self.y + self.height + 50, '{0:.2f}'.format(self.data), bold=True, font='comicsansms')
+        self.priceText = Text(self.win, self.x + self.width / 2 - 40, self.y + self.height + 50, 'Price: {0:.2f}'.format(self.data), font='comicsansms')
+        self.stocksOwnedText = Text(self.win, self.priceText.x, self.priceText.y + 30, 'Own: {}'.format(self.stocksOwned), font='comicsansms')
 
         self.isClicked = False
 
@@ -31,4 +34,9 @@ class Stock(object):
                 self.isClicked = False            
         else:
             self.win.blit(self.img, (self.x, self.y))
-        self.text.draw()
+        self.priceText.draw()
+        self.stocksOwnedText.draw()
+
+    def stocksChange(self, number):
+        self.stocksOwned += number
+        self.stocksOwnedText.changeMessage('Own: {}'.format(self.stocksOwned))

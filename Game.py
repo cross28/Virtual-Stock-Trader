@@ -45,8 +45,6 @@ msft = pygame.image.load('images/microsoft.png')
 
 #Creating buttons 
 money = 50000
-buffer = ''
-index = 0
 moneyBox = Text(win, 20, 40, '${}'.format(money), size=90)
 buy_btn = Button(win, SCREEN_WIDTH / 5, 800, GREEN, BRIGHT_GREEN, DARK_GREEN, 'Buy')
 sell_btn = Button(win, 3 * SCREEN_WIDTH / 5, 800, RED, BRIGHT_RED, DARK_RED, 'Sell')
@@ -64,6 +62,10 @@ apple = Stock(win, 2 * SCREEN_WIDTH / 5, 300, appl, companyPrices['AAPL'])
 microsoft = Stock(win, 3 * SCREEN_WIDTH / 5, 300, msft, companyPrices['MSFT'])
 netflix = Stock(win, 4.2 * SCREEN_WIDTH / 5, 300, nflx, companyPrices['NFLX'])
 stocks = [facebook, amazon, apple, microsoft, netflix]
+
+#Buffers
+buffer = ''
+index = 0
 
 def buySellMenu():
     global buffer
@@ -117,14 +119,21 @@ def mainMenu():
        the buy and sell menu breaks before
        any operations can be performed on it'''
     if buy_btn.isClicked is True and buffer:
-        #Look right here tomorrow
-        money -= float(buffer) * stocks[index].data
-        moneyBox.changeMessage('${}'.format(money))
-        buy_btn.isClicked = False
+        if float(buffer) != 0:
+            stocks[index].stocksChange(int(buffer))
+            money -= float(buffer) * stocks[index].data
+            moneyBox.changeMessage('${}'.format(money))
+            buy_btn.isClicked = False
+        else:
+            buy_btn.isClicked = False
     elif sell_btn.isClicked is True and buffer:
-        money += float(buffer) * stocks[index].data
-        moneyBox.changeMessage('${}'.format(money))
-        sell_btn.isClicked = False      
+        if float(buffer) != 0:
+            stocks[index].stocksChange(-int(buffer))
+            money += float(buffer) * stocks[index].data
+            moneyBox.changeMessage('${}'.format(money))
+            sell_btn.isClicked = False      
+        else:
+            sell_btn.isClicked = False
 
     run = True
     while run:
@@ -139,8 +148,6 @@ def mainMenu():
 
         win.fill(WHITE)   
         for stock in stocks:
-            #if stock.isClicked is True:
-                #index = stocks.index(stock)
             stock.draw(buySellMenu)     
         moneyBox.draw()
         inpBox.updateBox('')
