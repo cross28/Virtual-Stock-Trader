@@ -45,7 +45,8 @@ msft = pygame.image.load('images/microsoft.png')
 
 #Creating buttons 
 money = 50000
-moneyBuffer = ''
+buffer = ''
+index = 0
 moneyBox = Text(win, 20, 40, '${}'.format(money), size=90)
 buy_btn = Button(win, SCREEN_WIDTH / 5, 800, GREEN, BRIGHT_GREEN, DARK_GREEN, 'Buy')
 sell_btn = Button(win, 3 * SCREEN_WIDTH / 5, 800, RED, BRIGHT_RED, DARK_RED, 'Sell')
@@ -65,21 +66,19 @@ netflix = Stock(win, 4.2 * SCREEN_WIDTH / 5, 300, nflx, companyPrices['NFLX'])
 stocks = [facebook, amazon, apple, microsoft, netflix]
 
 def buySellMenu():
-    global money
-    global moneyBox
-    global moneyBuffer
+    global buffer
+    global index
+    buffer = '' 
 
-    moneyBuffer = ''
-
-    if buy_btn.isClicked is True and moneyBuffer:
-        money -= int(moneyBuffer)
-        moneyBox.changeMessage('${}'.format(money))
-        buy_btn.isClicked = False
-    elif sell_btn.isClicked is True and moneyBuffer:
-        money += int(moneyBuffer)
-        moneyBox.changeMessage('${}'.format(money))
-        sell_btn.isClicked = False
-
+    '''The index will act as a buffer for the stock 
+       price. Checking to see if the stock was pressed
+       has to be checked in the buy/sell menu because
+       the main menu ends before checking of the 
+       stock.isClicked boolean can return a value.'''
+    for stock in stocks:
+        if stock.isClicked is True:
+            index = stocks.index(stock)
+    
     run = True
     while run:
         for event in pygame.event.get():
@@ -91,14 +90,15 @@ def buySellMenu():
                     pygame.quit()
                     quit()
                 elif event.key != pygame.K_BACKSPACE:
+                    #Gets keyboard input for buying and selling
                     if inpBox.text.text.get_rect().width <= inpBox.width - 33:
-                        moneyBuffer += chr(event.key) 
-                        inpBox.updateBox(moneyBuffer)
+                        buffer += chr(event.key) 
+                        inpBox.updateBox(buffer)
                     else:
                         pass
                 else:
-                    moneyBuffer = ''
-                    inpBox.updateBox(moneyBuffer)
+                    buffer = ''
+                    inpBox.updateBox(buffer)
 
         win.fill(WHITE)
         buy_btn.draw(mainMenu)
@@ -110,17 +110,21 @@ def buySellMenu():
 
 def mainMenu():
     global money
-    global moneyBox
-    global moneyBuffer
-
-    if buy_btn.isClicked is True and moneyBuffer:
-        money -= int(moneyBuffer)
+    global buffer
+    global index
+    
+    '''The money is changed here because
+       the buy and sell menu breaks before
+       any operations can be performed on it'''
+    if buy_btn.isClicked is True and buffer:
+        #Look right here tomorrow
+        money -= float(buffer) * stocks[index].data
         moneyBox.changeMessage('${}'.format(money))
         buy_btn.isClicked = False
-    elif sell_btn.isClicked is True and moneyBuffer:
-        money += int(moneyBuffer)
+    elif sell_btn.isClicked is True and buffer:
+        money += float(buffer) * stocks[index].data
         moneyBox.changeMessage('${}'.format(money))
-        sell_btn.isClicked = False
+        sell_btn.isClicked = False      
 
     run = True
     while run:
@@ -135,6 +139,8 @@ def mainMenu():
 
         win.fill(WHITE)   
         for stock in stocks:
+            #if stock.isClicked is True:
+                #index = stocks.index(stock)
             stock.draw(buySellMenu)     
         moneyBox.draw()
         inpBox.updateBox('')
