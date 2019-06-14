@@ -15,6 +15,8 @@ class Stock(object):
         self.img = pygame.transform.scale(img, (self.width, self.height))
         self.text = Text(self.win, self.x + self.width / 2 - 40, self.y + self.height + 50, '{0:.2f}'.format(self.data), bold=True, font='comicsansms')
 
+        self.isClicked = False
+
     def draw(self,action=None):
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()[0]
@@ -23,7 +25,10 @@ class Stock(object):
             pygame.draw.rect(self.win, (0, 0, 255), (self.x - 25, self.y - 25, self.width + 50, self.height + 50))
             self.win.blit(self.img, (self.x, self.y))
             if click == 1 and action != None:
-                action()                   
+                self.isClicked = True
+                action()       
+            else:
+                self.isClicked = False            
         else:
             self.win.blit(self.img, (self.x, self.y))
         self.text.draw()
