@@ -24,6 +24,7 @@ SCREEN_HEIGHT = 1000
 win = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption('Virtual Stock Trader')
 
+
 '''
 #Grabbing Stock Data
 api_key = open('secret.txt', 'r').read()
@@ -33,34 +34,27 @@ companyPrices = {}
 for company in companyList:
     url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={}&outputsize=full&apikey='.format(company) + api_key
     data = re.get(url).json()['Time Series (Daily)']['2019-05-24']
-    companyPrices[company] = data
+    companyPrices[company] = data.
+api_key.close()
 '''
 
-#Pre-loading stock images
-fb = pygame.image.load('images/facebook.png')
-amzn = pygame.image.load('images/amazon.png')
-nflx = pygame.image.load('images/netflix.png')
-appl = pygame.image.load('images/apple.png')
-msft = pygame.image.load('images/microsoft.png')
-
 #Creating buttons 
-money = 50000
+money =90000
 moneyBox = Text(win, 20, 40, '${}'.format(money), size=90)
 buy_btn = Button(win, SCREEN_WIDTH / 5, 800, GREEN, BRIGHT_GREEN, DARK_GREEN, 'Buy')
 sell_btn = Button(win, 3 * SCREEN_WIDTH / 5, 800, RED, BRIGHT_RED, DARK_RED, 'Sell')
 
 #Input box for buying/selling the stocks
 inpBox = ioBox(win, buy_btn.x, SCREEN_HEIGHT / 3, buy_btn.width + sell_btn.width, 200)
-outBox = ioBox(win, buy_btn.x, 300, buy_btn.width + sell_btn.width, 200)
 screenText = Text(win, inpBox.x, inpBox.y + inpBox.height + 20, 'How many shares would you like to buy?', size=50)
 
 #Stock buttons
 companyPrices = {'FB':{'1. open': 20}, 'AMZN':{'1. open': 20}, 'AAPL':{'1. open': 20}, 'MSFT':{'1. open':20}, 'NFLX':{'1. open': 20}}
-facebook = Stock(win, 30, 300, fb, companyPrices['FB'])
-amazon = Stock(win, SCREEN_WIDTH / 5, 300, amzn, companyPrices['AMZN'])
-apple = Stock(win, 2 * SCREEN_WIDTH / 5, 300, appl, companyPrices['AAPL'])
-microsoft = Stock(win, 3 * SCREEN_WIDTH / 5, 300, msft, companyPrices['MSFT'])
-netflix = Stock(win, 4.2 * SCREEN_WIDTH / 5, 300, nflx, companyPrices['NFLX'])
+facebook = Stock(win, 30, 300, 'images/facebook.png', companyPrices['FB'])
+amazon = Stock(win, SCREEN_WIDTH / 5, 300, 'images/amazon.png', companyPrices['AMZN'])
+apple = Stock(win, 2 * SCREEN_WIDTH / 5, 300, 'images/apple.png', companyPrices['AAPL'])
+microsoft = Stock(win, 3 * SCREEN_WIDTH / 5, 300, 'images/microsoft.png', companyPrices['MSFT'])
+netflix = Stock(win, 4.2 * SCREEN_WIDTH / 5, 300, 'images/netflix.png', companyPrices['NFLX'])
 stocks = [facebook, amazon, apple, microsoft, netflix]
 
 #Buffers
@@ -80,6 +74,7 @@ def buySellMenu():
     for stock in stocks:
         if stock.isClicked is True:
             index = stocks.index(stock)
+            stock.isClicked = False
     
     run = True
     while run:
@@ -104,7 +99,8 @@ def buySellMenu():
 
         win.fill(WHITE)
         buy_btn.draw(mainMenu)
-        sell_btn.draw(mainMenu)        
+        sell_btn.draw(mainMenu) 
+        stocks[index].drawSelected()       
         screenText.draw()
         inpBox.draw()
         moneyBox.draw()
@@ -119,22 +115,22 @@ def mainMenu():
        the buy and sell menu breaks before
        any operations can be performed on it'''
     if buy_btn.isClicked is True and buffer:
-        if float(buffer) != 0:
+        if int(buffer) != 0 and 0 <= int(buffer) <= stocks[index].stocksOwned:
             stocks[index].stocksChange(int(buffer))
-            money -= float(buffer) * stocks[index].data
+            money -= float(buffer) * float(stocks[index].data)
             moneyBox.changeMessage('${}'.format(money))
             buy_btn.isClicked = False
         else:
             buy_btn.isClicked = False
     elif sell_btn.isClicked is True and buffer:
-        if float(buffer) != 0:
-            stocks[index].stocksChange(-int(buffer))
-            money += float(buffer) * stocks[index].data
+        if int(buffer) != 0 and 0 <= int(buffer) <= stocks[index].stocksOwned:
+            stocks[index].stocksChange(-int(buffer)) 
+            money += float(buffer) * float(stocks[index].data)
             moneyBox.changeMessage('${}'.format(money))
             sell_btn.isClicked = False      
         else:
             sell_btn.isClicked = False
-
+    index = 0
     run = True
     while run:
         for event in pygame.event.get():
