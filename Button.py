@@ -42,6 +42,6 @@ class Button(object):
             pygame.draw.rect(self.win, self.color, (self.x, self.y, self.width, self.height))
 
         # Must set text x and y position in the draw function because the message isn't created yet
-        self.text.x = self.x + self.text.text.get_rect().width / 2
-        self.text.y = self.y + self.text.text.get_rect().height / 2
+        self.text.x = self.x + (self.width - self.text.textSize[0]) // 2
+        self.text.y = self.y + (self.height - self.text.textSize[1]) // 2
         self.text.draw()

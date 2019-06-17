@@ -9,6 +9,7 @@ class Text(object):
         self.bold = bold
         self.font = pygame.font.SysFont(self.default_font, self.size, self.bold)
         self.text = self.font.render(self.msg, True, (0,0,0))
+        self.textSize = self.font.size(self.msg)
         self.win = win
         self.x = x
         self.y = y 
