@@ -35,7 +35,7 @@ with open('settings.json') as j:
 	f = json.load(j)
 fileSave = {}
 fileSave['money'] = f['money']
-'''
+
 #Grabbing Stock Data
 with open('secret.txt', 'r') as r: 
     api_key = r.read()
@@ -46,9 +46,7 @@ for company in companyList:
     url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={}&outputsize=full&apikey='.format(company) + api_key
     data = re.get(url).json()['Time Series (Daily)']['2019-05-24']
     companyPrices[company] = data
-'''
-#Testing purposes
-companyPrices = {'FB':{'1. open': 20}, 'AMZN':{'1. open': 19}, 'AAPL':{'1. open': 20}, 'MSFT':{'1. open':20}, 'NFLX':{'1. open': 20}}
+
 
 #Creating buttons 
 money = f['money']
