@@ -13,11 +13,11 @@ First, to set up, you'll need your own api key for now. Head on over to [Alpha V
 There are two methods to which you can insert your api key into the program:
 * You can create a text document named 'secret.txt' and paste the api key directly into their
 * Or you can go directly into the Game.py file and hard code it in.
-Go to lines 40 and 41: '''python
+Go to lines 40 and 41: ```python
                        with open ('secret.txt', 'r') as r:
                            api_key = r.read()
                        ```
 
-Remove this code, and put '''python
+Remove this code, and put ```python
                             api_key = _your api key_
                           ```
