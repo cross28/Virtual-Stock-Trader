@@ -2,7 +2,7 @@ import pygame
 import requests as re 
 import json
 import datetime as dt 
-import time
+
 
 from Button import Button
 from Text import Text
@@ -10,7 +10,7 @@ from Stock import Stock
 from ioBox import ioBox
 
 def write(data):
-    with open('settings.json', 'w') as f:
+    with open('settings.json', 'w+') as f:
         json.dump(data, f)
 
 #Predefined colors
@@ -37,29 +37,32 @@ fileSave = {}
 fileSave['money'] = f['money']
 '''
 #Grabbing Stock Data
-api_key = open('secret.txt', 'r').read()
+with open('secret.txt', 'r') as r: 
+    api_key = r.read()
 day = dt.date.today()
 companyList = ['AMZN', 'AAPL', 'FB', 'MSFT', 'NFLX']
 companyPrices = {}
 for company in companyList:
     url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={}&outputsize=full&apikey='.format(company) + api_key
     data = re.get(url).json()['Time Series (Daily)']['2019-05-24']
-    companyPrices[company] = data.
-api_key.close()
+    companyPrices[company] = data
 '''
+#Testing purposes
+companyPrices = {'FB':{'1. open': 20}, 'AMZN':{'1. open': 19}, 'AAPL':{'1. open': 20}, 'MSFT':{'1. open':20}, 'NFLX':{'1. open': 20}}
 
 #Creating buttons 
 money = f['money']
 moneyBox = Text(win, 20, 40, '${}'.format(money), size=90)
 buy_btn = Button(win, SCREEN_WIDTH / 5, 800, GREEN, BRIGHT_GREEN, DARK_GREEN, 'Buy')
 sell_btn = Button(win, 3 * SCREEN_WIDTH / 5, 800, RED, BRIGHT_RED, DARK_RED, 'Sell')
+reset_btn = Button(win, SCREEN_WIDTH - 150, 60, RED, BRIGHT_RED, DARK_RED, 'Reset', size=40)
+reset_btn.width, reset_btn.height = 130, 50
 
 #Input box for buying/selling the stocks
 inpBox = ioBox(win, buy_btn.x, SCREEN_HEIGHT / 3, buy_btn.width + sell_btn.width, 200)
 screenText = Text(win, inpBox.x, inpBox.y + inpBox.height + 20, 'How many shares would you like to buy?', size=50)
 
 #Stock buttons
-companyPrices = {'FB':{'1. open': 20}, 'AMZN':{'1. open': 19}, 'AAPL':{'1. open': 20}, 'MSFT':{'1. open':20}, 'NFLX':{'1. open': 20}}
 facebook = Stock(win, 30, 300, 'images/facebook.png', companyPrices['FB'])
 amazon = Stock(win, SCREEN_WIDTH / 5, 300, 'images/amazon.png', companyPrices['AMZN'])
 apple = Stock(win, 2 * SCREEN_WIDTH / 5, 300, 'images/apple.png', companyPrices['AAPL'])
@@ -80,12 +83,13 @@ for stock in stockNames:
     i = stockNames.index(stock)
     if f[stock][0] != 0:
         gain_loss += f[stock][0] * (float(f[stock][1]) - float(stocks[i].data))
+
 if gain_loss < 0: #Gain
     gain_loss_text.changeMessage('You gained ${}'.format(gain_loss))
 elif gain_loss > 0: #Loss
     gain_loss_text.changeMessage('You lost ${}'.format(abs(gain_loss)))
 else: #No gain or loss 
-    gain_loss_text.changeMessage('You didn\'t lose any money')
+    gain_loss_text.changeMessage('$0 was gained')
 
 #Updating JSON file with current stock info
 for stock in stockNames:
@@ -98,7 +102,7 @@ buffer = ''
 index = 0
 
 def initialStart():
-    ok_btn = Button(win, SCREEN_WIDTH / 2.5, SCREEN_HEIGHT / 2 + 200, GREEN, BRIGHT_GREEN, DARK_GREEN, 'Okay')
+    ok_btn = Button(win, SCREEN_WIDTH / 2.3, SCREEN_HEIGHT / 2 + 200, GREEN, BRIGHT_GREEN, DARK_GREEN, 'Okay')
     gain_loss_text.x, gain_loss_text.y = SCREEN_WIDTH / 4, SCREEN_HEIGHT / 2
 
     run = True
@@ -112,9 +116,20 @@ def initialStart():
                     pygame.quit()
                     quit()
 
+        #Reset values
+        if reset_btn.isClicked is True:
+            money = 100000
+            moneyBox.changeMessage('${}'.format(money))
+            fileSave['money'] = money
+            for stock in stockNames:
+                fileSave[stock][0] = 0
+            for stock in stocks:
+                stock.stocksChange(-stock.stocksOwned)
+
         win.fill(WHITE)
         gain_loss_text.draw()
         ok_btn.draw(mainMenu)
+        reset_btn.draw()
         pygame.display.update()
 
 def buySellMenu():
@@ -173,6 +188,7 @@ def mainMenu():
     '''The money is changed here because
        the buy and sell menu breaks before
        any operations can be performed on it'''
+    #Subtract money, increment stocks owned, update file save
     if buy_btn.isClicked is True and buffer:
         if int(buffer) != 0 and float(buffer) * stocks[index].data <= money:
             stocks[index].stocksChange(int(buffer))
@@ -183,6 +199,7 @@ def mainMenu():
             buy_btn.isClicked = False
         else:
             buy_btn.isClicked = False
+    #Add money, decrease stocks owned, update file save
     elif sell_btn.isClicked is True and buffer:
         if int(buffer) != 0 and 0 <= int(buffer) <= stocks[index].stocksOwned:
             stocks[index].stocksChange(-int(buffer)) 
@@ -193,6 +210,7 @@ def mainMenu():
             sell_btn.isClicked = False      
         else:
             sell_btn.isClicked = False
+        
     index = 0
     run = True
     while run:
@@ -207,10 +225,21 @@ def mainMenu():
                     pygame.quit()
                     quit()
 
+        #Reset values
+        if reset_btn.isClicked is True:
+            money = 100000
+            moneyBox.changeMessage('${}'.format(money))
+            fileSave['money'] = money
+            for stock in stockNames:
+                fileSave[stock][0] = 0
+            for stock in stocks:
+                stock.stocksChange(-stock.stocksOwned)
+
         win.fill(WHITE)   
         for stock in stocks:
             stock.draw(buySellMenu)     
         moneyBox.draw()
+        reset_btn.draw()
         inpBox.updateBox('')
         pygame.display.update()
 
