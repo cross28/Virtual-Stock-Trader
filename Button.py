@@ -1,8 +1,9 @@
 import pygame 
+import time
 from Text import Text
 
 class Button(object):
-    def __init__(self, win, x, y, default_color, hover_color, clicked_color, msg):
+    def __init__(self, win, x, y, default_color, hover_color, clicked_color, msg, size=50):
         self.win = win
         self.x = x
         self.y = y
@@ -10,7 +11,8 @@ class Button(object):
         self.height = 90
 
         self.msg = msg
-        self.text = Text(self.win, self.x, self.y, self.msg, size=50)
+        self.size = size
+        self.text = Text(self.win, self.x, self.y, self.msg, size=self.size)
         
         self.color = () 
         self.default_color = default_color
@@ -30,6 +32,9 @@ class Button(object):
                 self.color = self.clicked_color  
                 self.isClicked = True      
                 action()
+            elif click == 1 and action == None:
+                self.color = self.clicked_color
+                self.isClicked = True
             else:
                 self.isClicked = False
         else:
