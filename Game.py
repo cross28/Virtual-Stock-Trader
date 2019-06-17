@@ -74,7 +74,7 @@ for stock in stocks:
     stock.stocksChange(f[stockNames[i]][0])
 
 #Calculate Gain/Loss
-gain_loss_text = Text(win, 30, 30, '')
+gain_loss_text = Text(win, 30, 30, '', size=90)
 gain_loss = 0
 for stock in stockNames:
     i = stockNames.index(stock)
@@ -96,6 +96,26 @@ write(fileSave)
 #Buffers
 buffer = ''
 index = 0
+
+def initialStart():
+    ok_btn = Button(win, SCREEN_WIDTH / 2.5, SCREEN_HEIGHT / 2 + 200, GREEN, BRIGHT_GREEN, DARK_GREEN, 'Okay')
+    gain_loss_text.x, gain_loss_text.y = SCREEN_WIDTH / 4, SCREEN_HEIGHT / 2
+
+    run = True
+    while run:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    quit()
+
+        win.fill(WHITE)
+        gain_loss_text.draw()
+        ok_btn.draw(mainMenu)
+        pygame.display.update()
 
 def buySellMenu():
     global buffer
@@ -190,10 +210,9 @@ def mainMenu():
         win.fill(WHITE)   
         for stock in stocks:
             stock.draw(buySellMenu)     
-        gain_loss_text.draw()
         moneyBox.draw()
         inpBox.updateBox('')
         pygame.display.update()
 
 if __name__ == '__main__':
-    mainMenu()
+    initialStart()
