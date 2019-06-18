@@ -34,7 +34,7 @@ pygame.display.set_caption('Virtual Stock Trader')
 with open('settings.json') as j:
 	f = json.load(j)
 fileSave = {}
-fileSave['money'] = f['money']
+fileSave['money'] = round(float(f['money']), 2)
 
 #Grabbing Stock Data
 with open('secret.txt', 'r') as r: 
@@ -49,7 +49,7 @@ for company in companyList:
 
 
 #Creating buttons 
-money = f['money']
+money = round(float(f['money']), 2)
 moneyBox = Text(win, 20, 40, '${}'.format(money), size=90)
 buy_btn = Button(win, SCREEN_WIDTH / 5, 800, GREEN, BRIGHT_GREEN, DARK_GREEN, 'Buy')
 sell_btn = Button(win, 3 * SCREEN_WIDTH / 5, 800, RED, BRIGHT_RED, DARK_RED, 'Sell')
@@ -190,7 +190,7 @@ def mainMenu():
     if buy_btn.isClicked is True and buffer:
         if int(buffer) != 0 and float(buffer) * stocks[index].data <= money:
             stocks[index].stocksChange(int(buffer))
-            money -= float(buffer) * float(stocks[index].data)
+            money -= round(float(buffer) * float(stocks[index].data), 2)
             moneyBox.changeMessage('${}'.format(money))
             fileSave['money'] = money
             fileSave[stockNames[index]][0] += int(buffer)
@@ -201,7 +201,7 @@ def mainMenu():
     elif sell_btn.isClicked is True and buffer:
         if int(buffer) != 0 and 0 <= int(buffer) <= stocks[index].stocksOwned:
             stocks[index].stocksChange(-int(buffer)) 
-            money += float(buffer) * float(stocks[index].data)
+            money += round(float(buffer) * float(stocks[index].data), 2)
             moneyBox.changeMessage('${}'.format(money))
             fileSave['money'] = money
             fileSave[stockNames[index]][0] -= int(buffer)
