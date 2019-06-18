@@ -2,10 +2,10 @@ import pygame
 
 '''Will handle text output to the menu'''
 class Text(object):
-    def __init__(self, win, x, y, msg, size=30, font='Arial.ttf', bold=False):
+    def __init__(self, win, x, y, msg, size=30, bold=False):
         self.msg = msg
         self.size = size
-        self.default_font = font
+        self.default_font = pygame.font.get_fonts()[47] #freesans
         self.bold = bold
         self.font = pygame.font.SysFont(self.default_font, self.size, self.bold)
         self.text = self.font.render(self.msg, True, (0,0,0))

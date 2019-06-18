@@ -15,8 +15,8 @@ class Stock(object):
         self.data = round(float(self.data), 2)
 
         self.img = pygame.transform.scale(pygame.image.load(img), (self.width, self.height))
-        self.priceText = Text(self.win, self.x + self.width / 2 - 40, self.y + self.height + 50, 'Price: {0:.2f}'.format(self.data), font='comicsansms')
-        self.stocksOwnedText = Text(self.win, self.priceText.x, self.priceText.y + 30, 'Own: {}'.format(self.stocksOwned), font='comicsansms')
+        self.priceText = Text(self.win, self.x + self.width / 2 - 40, self.y + self.height + 50, 'Price: {0:.2f}'.format(self.data))
+        self.stocksOwnedText = Text(self.win, self.priceText.x, self.priceText.y + 30, 'Own: {}'.format(self.stocksOwned))
 
         self.isClicked = False
 
