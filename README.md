@@ -23,3 +23,31 @@ Remove this code, and put:
 ```python
 api_key = _your api key_
 ```
+
+Once this is done, you can save the program and move to the terminal. You can play the game by running the Game.py script, or it can be turned into an executable with the pyinstaller library.
+
+Open the terminal and type:
+```
+pip3 install pyinstaller
+```
+
+Once that installs, in the terminal, go to the directory of the scripts. In their you'll want to type:
+```
+pyinstaller --onefile Game.py
+```
+
+After the script is done, you will see a new file and folder.
+
+Build, dist, and Game.spec:
+
+![alt text](/home/cross/Pictures/folder.png)
+
+The main item to focus on is the /dist folder. Go into the /dist folder and the game executable will be in it.
+
+![alt text](/home/cross/Pictures/dist.png)
+
+Here you will want to move the executable back one directory where all the python scripts are.
+
+![alt text](/home/cross/Pictures/moved.png)
+
+And then the program is all setup. A shortcut to the executable in the file can be made to put on the desktop.
