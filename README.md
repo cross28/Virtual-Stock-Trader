@@ -40,14 +40,14 @@ After the script is done, you will see a new file and folder.
 
 Build, dist, and Game.spec:
 
-![alt text](/home/Pictures/folder.png)
+![alt text](/images/folder.png)
 
 The main item to focus on is the /dist folder. Go into the /dist folder and the game executable will be in it.
 
-![alt text](/home/Pictures/dist.png)
+![alt text](/images/dist.png)
 
 Here you will want to move the executable back one directory where all the python scripts are.
 
-![alt text](/home/Pictures/moved.png)
+![alt text](/images/moved.png)
 
 And then the program is all setup. A shortcut to the executable in the file can be made to put on the desktop.
